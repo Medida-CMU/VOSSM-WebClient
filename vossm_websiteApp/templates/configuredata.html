@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> Manage Peers </title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+ <body>
+  {% include 'index.html' %}
+<div class="container">
+  <div class="page-header">
+  <h2>Configure Data</h2>
+  </div>
+  <table border="0" cellspacing="8">
+   <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td><label>Filter:</label></td>
+    <td>
+    <div class="input-group"><input type="text" id="txtPackageName" placeholder="Package Name" class="form-control"><span class="glyphicon glyphicon-search form-control-feedback"></span></input></div>
+    </td>
+    <td>&nbsp;</td>
+    <td><div class="input-group"><input type="text" id="txtLanguage" placeholder="Language" class="form-control"><span class="glyphicon glyphicon-search form-control-feedback"></span></input></div></td>
+    <td>&nbsp;</td>
+    <td><div class="input-group"><input type="text" placeholder="Occurences" id="txtOccurrences" class="form-control"></input><span class="glyphicon glyphicon-search form-control-feedback"></span></div></td>
+    <td>&nbsp;</td>
+    <td><div class="input-group"><input type="text" id="txtCitations" placeholder="Citations"class="form-control"></input><span class="glyphicon glyphicon-search form-control-feedback"></span></div></td>
+    <td>&nbsp;</td>
+    <td><button type="button" id="btnSubmit" class="btn btn-primary">Search</button></td>
+   <tr/>
+ </table>
+ <br/>
+ <br/>
+<div class="table-responsive">
+        <table class="table table-striped">
+           <thead>
+              <tr>
+                <th>Select</th>
+                <th>Package Name</th>
+                <th>Version</th>
+                <th>Language</th>
+                <th>Occurrences</th>
+              </tr>
+           </thead> 
+           <tbody>
+            <tr>
+               <td>
+                     <input type="checkbox" value="chkData"></input>
+               </td>
+               <td>
+                    roxygen2
+               </td>
+               <td>
+                    1.10
+               </td>
+               <td>
+                    R
+               </td>
+               <td>
+                    12
+               </td>
+            </tr>
+           </tbody>
+       </table>
+ </div>
+ </div>
+</body>
+</html>

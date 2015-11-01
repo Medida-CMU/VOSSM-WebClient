@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> Manage Peers </title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+ <body>
+ {% include 'index.html' %}
+  <div class="container">
+    <div class="page-header">
+      <h2>Manage Peers</h2>
+    </div>
+     <div class="table-responsive">
+        <table class="table table-striped">
+           <thead>
+            <tr>
+                <th>HostName</th>
+                <th>IP Address:Port Number</th>
+                <th>Language</th>
+                <th>Delete</th>
+           </tr>
+           </thead> 
+           <tbody>
+            <tr>
+                <td>Dummy User</td>
+                <td>127.0.0.1:8000</td>
+                <td>Python</td>
+                <td>
+                    <button type="button" class="btn btn-primary">Approve</button>
+                    <button type="button" class="btn btn-danger">Deny</button>
+                </td>
+            </tr>
+            <tr>
+                <td>Dummy User2</td>
+                <td>127.0.0.1:8001</td>
+                <td>Python | Java </td>
+                <td>
+                    <button type="button" class="btn btn-primary">Approve</button>
+                    <button type="button" class="btn btn-danger">Deny</button>
+                </td>
+            </tr>   
+            <tr>
+                <td>Dummy User3</td>
+                <td>127.0.0.1:8002</td>
+                <td>Python</td>
+                <td>
+                    <button type="button" class="btn btn-danger">Delete</button>
+                </td>
+            </tr>   
+           </tbody> 
+        </table>
+      </div>
+  </div>
+ </body>
+ </html>
