@@ -10,6 +10,7 @@
     <div class="page-header">
       <h2>Manage Peers</h2>
     </div>
+
      <div class="table-responsive">
         <table class="table table-striped">
            <thead>
@@ -21,33 +22,24 @@
            </tr>
            </thead> 
            <tbody>
+            {% for key,value in data.items %}
             <tr>
-                <td>Dummy User</td>
-                <td>127.0.0.1:8000</td>
-                <td>Python</td>
-                <td>
-                    <button type="button" class="btn btn-primary">Approve</button>
-                    <button type="button" class="btn btn-danger">Deny</button>
-                </td>
-            </tr>
-            <tr>
-                <td>Dummy User2</td>
-                <td>127.0.0.1:8001</td>
-                <td>Python | Java </td>
-                <td>
-                    <button type="button" class="btn btn-primary">Approve</button>
-                    <button type="button" class="btn btn-danger">Deny</button>
-                </td>
-            </tr>   
-            <tr>
-                <td>Dummy User3</td>
-                <td>127.0.0.1:8002</td>
-                <td>Python</td>
-                <td>
-                    <button type="button" class="btn btn-danger">Delete</button>
-                </td>
-            </tr>   
-           </tbody> 
+              <td>
+                {{ value.HostName }}
+              </td>
+              <td>
+                {{ value.IPAddress }}
+              </td>
+               <td>
+                {{ value.Language }}
+              </td>
+              <td>
+                  <button type="button" class="btn btn-primary">Approve</button>
+                  <button type="button" class="btn btn-danger">Deny</button>
+              </td>
+             </tr>
+            {% endfor %}
+          </tbody>
         </table>
       </div>
   </div>
