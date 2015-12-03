@@ -42,23 +42,25 @@
               </tr>
            </thead> 
            <tbody>
+           {% for key,value in data.items %}
             <tr>
                <td>
                      <input type="checkbox" value="chkData"></input>
                </td>
                <td>
-                    roxygen2
+                    {{ value.pkgT }}
                </td>
                <td>
-                    1.10
+                    {{ value.scimapInfoVersion }}
                </td>
                <td>
-                    R
+                    {{ value.platform }}
                </td>
                <td>
-                    12
+                    {{ value.user }}
                </td>
             </tr>
+             {% endfor %}
            </tbody>
        </table>
  </div>
