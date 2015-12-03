@@ -6,11 +6,11 @@ from django.conf.urls.defaults import patterns, include, url
 
 urlpatterns = patterns('',
       url(r'^$', 'vossm_websiteApp.home.home'),
-      url(r'^home', 'vossm_websiteApp.home.home'),
-      url(r'^sharedata/','vossm_websiteApp.sharedata.share'),
-      url(r'^configure/','vossm_websiteApp.configuredata.configure'),
-      url(r'^managepeers/','vossm_websiteApp.managepeers.manage'),
-      url(r'^filter/','vossm_websiteApp.sharedata.filter'),
+      url(r'^home$', 'vossm_websiteApp.home.home'),
+      url(r'^sharedata$','vossm_websiteApp.sharedata.share'),
+      url(r'^configure$','vossm_websiteApp.configuredata.configure'),
+      url(r'^managepeers$','vossm_websiteApp.managepeers.manage'),
+      url(r'^filter$','vossm_websiteApp.sharedata.filter'),
       #url(r'^configure/','vossm_websiteApp.configuredata.configure'),
       #url(r'^projecttag/','vossm_websiteApp.summarybyprojecttag.summary'),
     # Examples:
