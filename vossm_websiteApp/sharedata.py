@@ -1,4 +1,6 @@
-from pymongo import Connection
+#from pymongo import Connection
+import pymongo
+from pymongo import MongoClient
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.forms import AuthenticationForm
@@ -18,9 +20,10 @@ database_name="vossmDB"
 collection_name="Data"
 
 def share(request):
-    connection = Connection()
-
-    db = connection[database_name]
+    #connection = Connection()
+    connection = MongoClient()
+    db = connection.vossmDB
+    #db = connection[database_name]
     collection = db[collection_name]
 
     data= {}
@@ -38,8 +41,10 @@ def share(request):
 
 @csrf_exempt
 def filter(request):
-    connection = Connection()
-    db = connection[database_name]
+    #connection = Connection()
+    #db = connection[database_name]
+    connection = MongoClient()
+    db = connection.vossmDB
     collection = db[collection_name]
     
     data={}
