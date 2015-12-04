@@ -5,6 +5,7 @@ from django.shortcuts import render
 
 database_name="VOSSM"
 collection_name="raw_data"
+collection_name_parse="parsed_data"
 
 def configure(request):
 	data = {}
@@ -12,10 +13,11 @@ def configure(request):
 	version = []
 	connection = MongoClient()
 	db = connection.VOSSM
-	collection = db[collection_name]
+	collection = db[collection_name_parse]
 	dataCursor = collection.find()
 	for record in dataCursor:
-		data[count] = record
+		record["_id"]["occurences"] = record["occurences"]
+		data[count] = record["_id"]
 		count = count+1
 
 		print version
