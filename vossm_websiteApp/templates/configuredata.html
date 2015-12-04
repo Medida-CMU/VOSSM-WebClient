@@ -37,8 +37,11 @@
                 <th>Select</th>
                 <th>Package Name</th>
                 <th>Version</th>
-                <th>Language</th>
-                <th>Occurrences</th>
+                <th>Hardware</th>
+                <th>System</th>
+                <th>User</th>
+                <th>Start Time</th>
+                <th>End Time</th>
               </tr>
            </thead> 
            <tbody>
@@ -48,16 +51,25 @@
                      <input type="checkbox" value="chkData"></input>
                </td>
                <td>
-                    {{ value.pkgT }}
+                    {{ value.package }}
                </td>
                <td>
-                    {{ value.scimapInfoVersion }}
+                    {{ value.version }}
                </td>
                <td>
-                    {{ value.platform }}
+                    {{ value.hardware }}
                </td>
                <td>
+                    {{ value.system }}
+               </td>
+                <td>
                     {{ value.user }}
+               </td>
+                <td>
+                    {{ value.start_time }}
+               </td>
+                <td>
+                    {{ value.end_time }}
                </td>
             </tr>
              {% endfor %}
