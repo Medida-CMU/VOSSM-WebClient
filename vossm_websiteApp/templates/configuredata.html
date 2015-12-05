@@ -112,10 +112,10 @@ var chart = AmCharts.makeChart( "chartdiv", {
     <td>&nbsp;</td>
     <td><div class="input-group"><input type="text" placeholder="Occurences" id="txtOccurrences" class="form-control"></input><span class="glyphicon glyphicon-search form-control-feedback"></span></div></td>
     <td>&nbsp;</td>
-    <td><div class="input-group"><input type="text" id="txtCitations" placeholder="Citations"class="form-control"></input><span class="glyphicon glyphicon-search form-control-feedback"></span></div></td>
-    <td>&nbsp;</td>
-    <td><button type="button" id="btnSubmit" class="btn btn-primary">Search</button></td>
-   <tr/>
+    <!--<td><div class="input-group"><input type="text" id="txtCitations" placeholder="Citations"class="form-control"></input><span class="glyphicon glyphicon-search form-control-feedback"></span></div></td>-->
+    <!--<td>&nbsp;</td>-->
+    <!--<td><button type="button" id="btnSubmit" class="btn btn-primary">Search</button></td>
+   <tr/>-->
  </table>
  <br/>
  <br/>
@@ -132,7 +132,7 @@ var chart = AmCharts.makeChart( "chartdiv", {
                 <th>Occurences</th>
               </tr>
            </thead> 
-           <tbody>
+           <tbody id="fbody">
            {% for key,value in data.items %}
             <tr>
                <td>
@@ -164,4 +164,117 @@ var chart = AmCharts.makeChart( "chartdiv", {
  </div>
  </div>
 </body>
+<script>
+ $("#txtPackageName").keyup(function () {
+  
+    var indexColumn=1;
+    //split the current value of searchInput
+    var data = this.value.split(" ");
+    //create a jquery object of the rows
+    var jo = $("#fbody").find("tr");
+    if (this.value == "") {
+        jo.show();
+        return;
+    }
+    //hide all the rows
+    jo.hide();
+
+    //Recusively filter the jquery object to get results.
+    jo.filter(function (i, v) {
+        //var $t = $(this);
+        var $t = $(this).children(":eq("+indexColumn+")");
+        for (var d = 0; d < data.length; ++d) {
+            if ($t.is(":contains('" + data[d] + "')")) {
+                return true;
+            }
+        }
+        return false;
+    })
+    //show the rows that match.
+    .show();
+}).focus(function () {
+    this.value = "";
+    $(this).css({
+        "color": "black"
+    });
+    $(this).unbind('focus');
+}).css({
+    "color": "#C0C0C0"
+});
+
+$("#txtLanguage").keyup(function () {
+  
+    var indexColumn=3;
+    //split the current value of searchInput
+    var data = this.value.split(" ");
+    //create a jquery object of the rows
+    var jo = $("#fbody").find("tr");
+    if (this.value == "") {
+        jo.show();
+        return;
+    }
+    //hide all the rows
+    jo.hide();
+
+    //Recusively filter the jquery object to get results.
+    jo.filter(function (i, v) {
+        //var $t = $(this);
+        var $t = $(this).children(":eq("+indexColumn+")");
+        for (var d = 0; d < data.length; ++d) {
+            if ($t.is(":contains('" + data[d] + "')")) {
+                return true;
+            }
+        }
+        return false;
+    })
+    //show the rows that match.
+    .show();
+}).focus(function () {
+    this.value = "";
+    $(this).css({
+        "color": "black"
+    });
+    $(this).unbind('focus');
+}).css({
+    "color": "#C0C0C0"
+});
+
+$("#txtOccurrences").keyup(function () {
+  
+    var indexColumn=4;
+    //split the current value of searchInput
+    var data = this.value.split(" ");
+    //create a jquery object of the rows
+    var jo = $("#fbody").find("tr");
+    if (this.value == "") {
+        jo.show();
+        return;
+    }
+    //hide all the rows
+    jo.hide();
+
+    //Recusively filter the jquery object to get results.
+    jo.filter(function (i, v) {
+        //var $t = $(this);
+        var $t = $(this).children(":eq("+indexColumn+")");
+        for (var d = 0; d < data.length; ++d) {
+            if ($t.is(":contains('" + data[d] + "')")) {
+                return true;
+            }
+        }
+        return false;
+    })
+    //show the rows that match.
+    .show();
+}).focus(function () {
+    this.value = "";
+    $(this).css({
+        "color": "black"
+    });
+    $(this).unbind('focus');
+}).css({
+    "color": "#C0C0C0"
+});
+
+ </script>
 </html>

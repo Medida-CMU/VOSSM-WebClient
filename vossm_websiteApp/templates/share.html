@@ -35,8 +35,8 @@
     <td><div class="input-group"><input placeholder="Language" type="text" id="txtLanguage" name="txtPackageName" class="form-control"></input><span class="glyphicon glyphicon-search form-control-feedback"></span></div></td>
     <td>&nbsp;</td>
     <td><div class="input-group"><input type="text" id="txtOccurrences" name="txtPackageName" placeholder="Occurrences" class="form-control"></input><span class="glyphicon glyphicon-search form-control-feedback"></span></div></td>
-    <td>&nbsp;</td>
-    <td><button type="button" id="btnSubmit" class="btn btn-primary" onclick="btnSubmit_click()">Search</button></td>
+    <!--<td>&nbsp;</td>
+    <td><button type="button" id="btnSubmit" class="btn btn-primary" onclick="btnSubmit_click()">Search</button></td>-->
  <tr/>
  </table>
  <br/>
@@ -52,7 +52,7 @@
                 <th>Occurrences</th>
               </tr>
            </thead> 
-           <tbody>
+           <tbody id="fbody">
              {% for key,value in data.items %}
              <tr>
               <td><input type="checkbox" value="chkData"></input></td>
@@ -69,70 +69,117 @@
 </form>
  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
  <script>
- function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie != '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+ $("#txtPackageName").keyup(function () {
+  
+    var indexColumn=1;
+    //split the current value of searchInput
+    var data = this.value.split(" ");
+    //create a jquery object of the rows
+    var jo = $("#fbody").find("tr");
+    if (this.value == "") {
+        jo.show();
+        return;
+    }
+    //hide all the rows
+    jo.hide();
+
+    //Recusively filter the jquery object to get results.
+    jo.filter(function (i, v) {
+        //var $t = $(this);
+        var $t = $(this).children(":eq("+indexColumn+")");
+        for (var d = 0; d < data.length; ++d) {
+            if ($t.is(":contains('" + data[d] + "')")) {
+                return true;
             }
         }
+        return false;
+    })
+    //show the rows that match.
+    .show();
+}).focus(function () {
+    this.value = "";
+    $(this).css({
+        "color": "black"
+    });
+    $(this).unbind('focus');
+}).css({
+    "color": "#C0C0C0"
+});
+
+$("#txtLanguage").keyup(function () {
+  
+    var indexColumn=3;
+    //split the current value of searchInput
+    var data = this.value.split(" ");
+    //create a jquery object of the rows
+    var jo = $("#fbody").find("tr");
+    if (this.value == "") {
+        jo.show();
+        return;
     }
-    return cookieValue;
-}
+    //hide all the rows
+    jo.hide();
 
-function btnSubmit_click() {
-   
-    var csrftoken = getCookie('csrftoken');
-    //alert(csrftoken);
-    var txtPackageName=document.getElementById("txtPackageName").value;
-    var txtOccurrences=document.getElementById("txtOccurrences").value;
-    var txtLanguage=document.getElementById("txtLanguage").value;
-   
-    var ajaxData = {csrfmiddlewaretoken: csrftoken,'packageName' : txtPackageName,'occurrences':txtOccurrences,'language':txtLanguage};
-          //'occurrences': txtOccurrences, 'Language': txtLanguage};
-    
-      $.ajaxSetup({
-          beforeSend: function(xhr, settings) {
-              if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                  xhr.setRequestHeader("X-CSRFToken", csrftoken);
-              }
-          }
-      }); // to check if the csrf token is set - django 1.7 doc
-    //alert();
-    function csrfSafeMethod(method) {
-          // these HTTP methods do not require CSRF protection
-          return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-      }
-      
-   
-    //alert(txtPackageName);
-    $.ajax({
-            url : "/filter/", // the endpoint
-            headers: { 'Content-Type': 'application/json'},
-            type : "POST", // http method
-            dataType:"json",
-            data : JSON.stringify(ajaxData), // data sent with the post request
-    
-            // handle a successful response
-            success : function(json) {
-                //console.log(json['result']); // log the returned json to the console
-                console.log("success");
-                console.log(json);
-                //console.log(json['PackageN);
-            },
-    
-            // handle a non-successful response
-            error : function(xhr,errmsg,err) {
-                console.log("Error!");
-                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+    //Recusively filter the jquery object to get results.
+    jo.filter(function (i, v) {
+        //var $t = $(this);
+        var $t = $(this).children(":eq("+indexColumn+")");
+        for (var d = 0; d < data.length; ++d) {
+            if ($t.is(":contains('" + data[d] + "')")) {
+                return true;
             }
-      }); 
+        }
+        return false;
+    })
+    //show the rows that match.
+    .show();
+}).focus(function () {
+    this.value = "";
+    $(this).css({
+        "color": "black"
+    });
+    $(this).unbind('focus');
+}).css({
+    "color": "#C0C0C0"
+});
 
-  }
+$("#txtOccurrences").keyup(function () {
+  
+    var indexColumn=4;
+    //split the current value of searchInput
+    var data = this.value.split(" ");
+    //create a jquery object of the rows
+    var jo = $("#fbody").find("tr");
+    if (this.value == "") {
+        jo.show();
+        return;
+    }
+    //hide all the rows
+    jo.hide();
+
+    //Recusively filter the jquery object to get results.
+    jo.filter(function (i, v) {
+        //var $t = $(this);
+        var $t = $(this).children(":eq("+indexColumn+")");
+        for (var d = 0; d < data.length; ++d) {
+            if ($t.is(":contains('" + data[d] + "')")) {
+                return true;
+            }
+        }
+        return false;
+    })
+    //show the rows that match.
+    .show();
+}).focus(function () {
+    this.value = "";
+    $(this).css({
+        "color": "black"
+    });
+    $(this).unbind('focus');
+}).css({
+    "color": "#C0C0C0"
+});
+
  </script>
  </body>
  </html>
