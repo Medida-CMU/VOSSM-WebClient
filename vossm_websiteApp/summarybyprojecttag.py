@@ -5,6 +5,7 @@ from django.core.context_processors import csrf
 from django.views.decorators.csrf import csrf_exempt
 from django.http import *
 import json 
+from sets import Set
 
 database_name="VOSSM"
 collection_name="raw_data"
@@ -19,13 +20,19 @@ def summary(request):
 	db = connection.VOSSM
 	collection = db[collection_name_parse]
 	dataCursor = collection.find()
+	uniquePackage = set()
+
 	for record in dataCursor:
-		record["_id"]["occurences"] = record["occurences"]
-		data[count] = record["_id"]
+		uniquePackage.add(record["_id"]["package"])
+
+	print uniquePackage
+	count = 1
+	mapTmp = {}
+	for record in uniquePackage:
+		mapTmp["package"] = record
+		data[count] = mapTmp
 		count = count+1
-
-		print version
-
+		mapTmp = {}
 	print data
 	return render(request, 'summarybyprojecttag.html', {"data" : data})
 
