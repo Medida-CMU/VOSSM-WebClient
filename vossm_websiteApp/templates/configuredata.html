@@ -69,6 +69,25 @@ var chart = AmCharts.makeChart( "chartdiv", {
 } );
 
     console.log("adssad")
+    function saveChanges () {
+      var checkedVal = []
+      var uncheckedVal = []
+     $("input:checkbox[name=chkData]:checked").each(function(){
+        checkedVal.push($(this).val());
+      });
+      $("input:checkbox[name=chkData]:not(:checked)").each(function(){
+        uncheckedVal.push($(this).val());
+      });
+
+     // console.log(checkedVal);
+       $.ajax({
+        type: "POST",
+        url: "/update_config/",
+        data: { 'checkedVal': JSON.stringify(checkedVal), 'uncheckedVal': JSON.stringify(uncheckedVal)}
+        }).done(function( o ) {
+            alert("Done");
+           });
+      }
 
     </script> 
 
@@ -78,6 +97,7 @@ var chart = AmCharts.makeChart( "chartdiv", {
 <div class="container">
   <div class="page-header">
   <h2>Configure Data</h2>
+
   </div>
   <table border="0" cellspacing="8">
    <tr>
@@ -116,7 +136,10 @@ var chart = AmCharts.makeChart( "chartdiv", {
            {% for key,value in data.items %}
             <tr>
                <td>
-                     <input type="checkbox" value="chkData"></input>
+               <div id= "checkDiv">
+                <input type="checkbox" name="chkData"  value = {{ value.package }} 
+                {% if value.selected == "true" %} checked {%endif %}></input>
+                </div>
                </td>
                <td>
                     {{ value.package }}
@@ -137,6 +160,7 @@ var chart = AmCharts.makeChart( "chartdiv", {
              {% endfor %}
            </tbody>
        </table>
+       <td><button type="button" id="save_button" class="btn btn-primary" onclick="saveChanges()">Save Changes</button>
  </div>
  </div>
 </body>

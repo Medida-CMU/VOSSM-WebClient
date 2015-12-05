@@ -11,6 +11,7 @@ urlpatterns = patterns('',
       url(r'^configure$','vossm_websiteApp.configuredata.configure'),
       url(r'^managepeers$','vossm_websiteApp.managepeers.manage'),
       url(r'^filter$','vossm_websiteApp.sharedata.filter'),
+      url(r'^update_config$','vossm_websiteApp.configuredata.update_config'),
       #url(r'^configure/','vossm_websiteApp.configuredata.configure'),
       #url(r'^projecttag/','vossm_websiteApp.summarybyprojecttag.summary'),
     # Examples:
