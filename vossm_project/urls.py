@@ -15,7 +15,7 @@ urlpatterns = patterns('',
       url(r'^projecttag/','vossm_websiteApp.summarybyprojecttag.summary'),
       url(r'^DBOperation/','vossm_websiteApp.DBOperations.DBOperation'),
       url(r'^softwareitem/','vossm_websiteApp.summarybysoftware.summary'),
-      
+      url(r'^download_json/$','vossm_websiteApp.sharedata.download_json'),
       url(r'^update_config/$','vossm_websiteApp.configuredata.update_config'),
       url(r'^TagUpdate/$','vossm_websiteApp.configuredata.TagUpdate'),
     # Examples:

@@ -2,10 +2,10 @@ import pymongo
 from pymongo import MongoClient
 #from pymongo import Connection
 from django.shortcuts import render
-
+from django.views.decorators.csrf import csrf_exempt
 database_name="vossmDB"
 collection_name="Users"
-
+@csrf_exempt
 def manage(request):
     #connection = Connection()
 

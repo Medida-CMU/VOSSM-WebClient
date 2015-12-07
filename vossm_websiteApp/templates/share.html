@@ -1,29 +1,43 @@
 <!DOCTYPE html>
 <html>
+
   <head>
-    <title> Share Data</title>
+    <title> Export Packages</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.js"></script>
+    <script type="text/javascript">
+      function downloadJSON() {
+      var checkedVal = []
+     $("input:checkbox[name=chkData]:checked").each(function(){
+        checkedVal.push($(this).val());
+      });
+        $.ajax({
+          type: "POST",
+          url: "/download_json/",
+          data: { 
+            'checkedVal': JSON.stringify(checkedVal)
+          },
+          success: function(response){
+            var blob = new Blob([JSON.stringify(response)], {type: "text/plain;charset=utf-8"});
+            saveAs(blob, "packages.json"); 
+
+          },
+          error: function(error){
+           console.log("Error");
+          }
+        });
+
+      }
+
+    </script>
   </head>
  <body>
 {% include 'index.html' %}
  <div class="container">
  <div class="page-header">
-  <h2>Share Data </h2
+  <h2>Export Packages </h2
 </div>
  <form action="" method="POST" id="share"> 
  {% csrf_token %}
- <table border="0" cellspacing="10">
- <tr>
-     <td>
-    <div class="checkbox">
-    <label><input type="checkbox" value="chkTime" disabled>Time:</label>
-    </div>
-    </td>
-    <td><div class="input-group"><input type="text" id="txtTime" class="form-control"></input></div></td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td><label>Share Data With:</label></td>
-    <td><div class="input-group"><input type="text" class="form-control" placeholder=""></input></div></td>
- </table>
  <br/>
  <table border="0" cellspacing="10">
  <tr>
@@ -35,6 +49,8 @@
     <td><div class="input-group"><input placeholder="Language" type="text" id="txtLanguage" name="txtPackageName" class="form-control"></input><span class="glyphicon glyphicon-search form-control-feedback"></span></div></td>
     <td>&nbsp;</td>
     <td><div class="input-group"><input type="text" id="txtOccurrences" name="txtPackageName" placeholder="Occurrences" class="form-control"></input><span class="glyphicon glyphicon-search form-control-feedback"></span></div></td>
+     <td>&nbsp;</td>
+    <td><button type="button" id="save_button" class="btn btn-primary" onclick="downloadJSON()">Download as json</button></td>
     <!--<td>&nbsp;</td>
     <td><button type="button" id="btnSubmit" class="btn btn-primary" onclick="btnSubmit_click()">Search</button></td>-->
  <tr/>
@@ -45,21 +61,33 @@
            <caption><b>Available Data</b></caption>
            <thead>
               <tr>
-                <th>[]Select</th>
+                <th>Select</th>
                 <th>Package Name</th>
                 <th>Version</th>
-                <th>Language</th>
-                <th>Occurrences</th>
+                <th>Hardware</th>
+                <th>System</th>
+                <th>Occurences</th>
               </tr>
            </thead> 
            <tbody id="fbody">
              {% for key,value in data.items %}
              <tr>
-              <td><input type="checkbox" value="chkData"></input></td>
-              <td> {{ value.PackageName}}</td>
-              <td> {{ value.Version}}</td>
-              <td> {{ value.Language}}</td>
-              <td> {{ value.Occurrences}}</td>
+              <td><input type="checkbox" name="chkData" value = {{ value.package }}></input></td>
+              <td>
+                    {{ value.package }}
+               </td>
+               <td>
+                    {{ value.version }}
+               </td>
+               <td>
+                    {{ value.hardware }}
+               </td>
+               <td>
+                    {{ value.system }}
+               </td>
+               <td>
+                    {{ value.occurences }}
+               </td>
             </tr>
              {% endfor %}
            </tbody> 
@@ -69,117 +97,117 @@
 </form>
  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
  <script>
- $("#txtPackageName").keyup(function () {
-  
-    var indexColumn=1;
-    //split the current value of searchInput
-    var data = this.value.split(" ");
-    //create a jquery object of the rows
-    var jo = $("#fbody").find("tr");
-    if (this.value == "") {
-        jo.show();
-        return;
-    }
-    //hide all the rows
-    jo.hide();
 
-    //Recusively filter the jquery object to get results.
-    jo.filter(function (i, v) {
-        //var $t = $(this);
-        var $t = $(this).children(":eq("+indexColumn+")");
-        for (var d = 0; d < data.length; ++d) {
-            if ($t.is(":contains('" + data[d] + "')")) {
-                return true;
-            }
-        }
-        return false;
-    })
-    //show the rows that match.
-    .show();
-}).focus(function () {
-    this.value = "";
-    $(this).css({
-        "color": "black"
-    });
-    $(this).unbind('focus');
-}).css({
-    "color": "#C0C0C0"
-});
+$("#txtHardware").keyup(function () {
+    
+      var indexColumn=3;
+      //split the current value of searchInput
+      var data = this.value.split(" ");
+      //create a jquery object of the rows
+      var jo = $("#fbody").find("tr");
+      if (this.value == "") {
+          jo.show();
+          return;
+      }
+      //hide all the rows
+      jo.hide();
 
-$("#txtLanguage").keyup(function () {
-  
-    var indexColumn=3;
-    //split the current value of searchInput
-    var data = this.value.split(" ");
-    //create a jquery object of the rows
-    var jo = $("#fbody").find("tr");
-    if (this.value == "") {
-        jo.show();
-        return;
-    }
-    //hide all the rows
-    jo.hide();
+      //Recusively filter the jquery object to get results.
+      jo.filter(function (i, v) {
+          //var $t = $(this);
+          var $t = $(this).children(":eq("+indexColumn+")");
+          for (var d = 0; d < data.length; ++d) {
+              if ($t.is(":contains('" + data[d] + "')")) {
+                  return true;
+              }
+          }
+          return false;
+      })
+      //show the rows that match.
+      .show();
+  }).focus(function () {
+      this.value = "";
+      $(this).css({
+          "color": "black"
+      });
+      $(this).unbind('focus');
+  }).css({
+      "color": "#C0C0C0"
+  });
 
-    //Recusively filter the jquery object to get results.
-    jo.filter(function (i, v) {
-        //var $t = $(this);
-        var $t = $(this).children(":eq("+indexColumn+")");
-        for (var d = 0; d < data.length; ++d) {
-            if ($t.is(":contains('" + data[d] + "')")) {
-                return true;
-            }
-        }
-        return false;
-    })
-    //show the rows that match.
-    .show();
-}).focus(function () {
-    this.value = "";
-    $(this).css({
-        "color": "black"
-    });
-    $(this).unbind('focus');
-}).css({
-    "color": "#C0C0C0"
-});
+  $("#txtSystem").keyup(function () {
+    
+      var indexColumn=4;
+      //split the current value of searchInput
+      var data = this.value.split(" ");
+      //create a jquery object of the rows
+      var jo = $("#fbody").find("tr");
+      if (this.value == "") {
+          jo.show();
+          return;
+      }
+      //hide all the rows
+      jo.hide();
 
-$("#txtOccurrences").keyup(function () {
-  
-    var indexColumn=4;
-    //split the current value of searchInput
-    var data = this.value.split(" ");
-    //create a jquery object of the rows
-    var jo = $("#fbody").find("tr");
-    if (this.value == "") {
-        jo.show();
-        return;
-    }
-    //hide all the rows
-    jo.hide();
+      //Recusively filter the jquery object to get results.
+      jo.filter(function (i, v) {
+          //var $t = $(this);
+          var $t = $(this).children(":eq("+indexColumn+")");
+          for (var d = 0; d < data.length; ++d) {
+              if ($t.is(":contains('" + data[d] + "')")) {
+                  return true;
+              }
+          }
+          return false;
+      })
+      //show the rows that match.
+      .show();
+  }).focus(function () {
+      this.value = "";
+      $(this).css({
+          "color": "black"
+      });
+      $(this).unbind('focus');
+  }).css({
+      "color": "#C0C0C0"
+  });
 
-    //Recusively filter the jquery object to get results.
-    jo.filter(function (i, v) {
-        //var $t = $(this);
-        var $t = $(this).children(":eq("+indexColumn+")");
-        for (var d = 0; d < data.length; ++d) {
-            if ($t.is(":contains('" + data[d] + "')")) {
-                return true;
-            }
-        }
-        return false;
-    })
-    //show the rows that match.
-    .show();
-}).focus(function () {
-    this.value = "";
-    $(this).css({
-        "color": "black"
-    });
-    $(this).unbind('focus');
-}).css({
-    "color": "#C0C0C0"
-});
+  $("#txtOccurrences").keyup(function () {
+    
+      var indexColumn=5;
+      //split the current value of searchInput
+      var data = this.value.split(" ");
+      //create a jquery object of the rows
+      var jo = $("#fbody").find("tr");
+      if (this.value == "") {
+          jo.show();
+          return;
+      }
+      //hide all the rows
+      jo.hide();
 
+      //Recusively filter the jquery object to get results.
+      jo.filter(function (i, v) {
+          //var $t = $(this);
+          var $t = $(this).children(":eq("+indexColumn+")");
+          for (var d = 0; d < data.length; ++d) {
+              if ($t.is(":contains('" + data[d] + "')")) {
+                  return true;
+              }
+          }
+          return false;
+      })
+      //show the rows that match.
+      .show();
+  }).focus(function () {
+      this.value = "";
+      $(this).css({
+          "color": "black"
+      });
+      $(this).unbind('focus');
+  }).css({
+      "color": "#C0C0C0"
+  });
  </script>
  </body>
  </html>
