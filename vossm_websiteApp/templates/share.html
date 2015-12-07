@@ -48,7 +48,11 @@
     <td>&nbsp;</td>
     <td><div class="input-group"><input placeholder="Language" type="text" id="txtLanguage" name="txtPackageName" class="form-control"></input><span class="glyphicon glyphicon-search form-control-feedback"></span></div></td>
     <td>&nbsp;</td>
-    <td><div class="input-group"><input type="text" id="txtOccurrences" name="txtPackageName" placeholder="Occurrences" class="form-control"></input><span class="glyphicon glyphicon-search form-control-feedback"></span></div></td>
+    <td><div class="input-group"><input placeholder="Hardware" type="text" id="txtHardware" name="txtHardware" class="form-control"></input><span class="glyphicon glyphicon-search form-control-feedback"></span></div></td>
+    <td>&nbsp;</td>
+    <td><div class="input-group"><input placeholder="Systems" type="text" id="txtSystem" name="txtPackageName" class="form-control"></input><span class="glyphicon glyphicon-search form-control-feedback"></span></div></td>
+    <td>&nbsp;</td>
+    <td><div class="input-group"><input type="text" id="txtOccurrences" name="txtOccurrences" placeholder="Occurrences" class="form-control"></input><span class="glyphicon glyphicon-search form-control-feedback"></span></div></td>
      <td>&nbsp;</td>
     <td><button type="button" id="save_button" class="btn btn-primary" onclick="downloadJSON()">Download as json</button></td>
     <!--<td>&nbsp;</td>
@@ -97,6 +101,42 @@
 </form>
  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
  <script>
+$("#txtPackageName").keyup(function () {
+    
+      var indexColumn=1;
+      //split the current value of searchInput
+      var data = this.value.split(" ");
+      //create a jquery object of the rows
+      var jo = $("#fbody").find("tr");
+      if (this.value == "") {
+          jo.show();
+          return;
+      }
+      //hide all the rows
+      jo.hide();
+
+      //Recusively filter the jquery object to get results.
+      jo.filter(function (i, v) {
+          //var $t = $(this);
+          var $t = $(this).children(":eq("+indexColumn+")");
+          for (var d = 0; d < data.length; ++d) {
+              if ($t.is(":contains('" + data[d] + "')")) {
+                  return true;
+              }
+          }
+          return false;
+      })
+      //show the rows that match.
+      .show();
+  }).focus(function () {
+      this.value = "";
+      $(this).css({
+          "color": "black"
+      });
+      $(this).unbind('focus');
+  }).css({
+      "color": "#C0C0C0"
+  });
 
 $("#txtHardware").keyup(function () {
     
