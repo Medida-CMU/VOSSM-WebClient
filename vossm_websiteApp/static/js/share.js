@@ -1,5 +1,5 @@
 function btnSubmit_click() {
 
-	alert("hello");
+	console.log("hello")
 
 }

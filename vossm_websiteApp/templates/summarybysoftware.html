@@ -1,13 +1,371 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title> Manage Peers </title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-  </head>
+    <title> Summary Software </title>
+    <script src="http://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script src="http://www.amcharts.com/lib/3/serial.js"></script>
+    <script src="http://www.amcharts.com/lib/3/themes/light.js"></script>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <style>
+      .chartdiv {
+        width       : 100%;
+        height      : 500px;
+        font-size   : 11px;
+      }
+      .col-centered{
+            float: none;
+            margin: 0 auto;
+        }
+
+        ul
+        {
+            list-style-type: none;
+        }
+    </style>
+	<script type="text/javascript">
+		var packDetail;
+        function leaveChange() {
+			packageName = document.getElementById("packages").value;
+		    document.getElementById("message").innerHTML = "Package Name - " + packageName;
+
+		    $.ajax({
+		         type:"POST",
+		         url:'/DBOperation/',
+		         data: {
+		                'operation': 'getData', 
+		                'packageName': packageName
+		                },
+		         success: function(response){
+		            if (response!=undefined)
+		            {
+                        console.log(response)
+		            	
+                        //get package detail from CRAN repo
+                        packDetail = response['detail'];
+                        //out repo has this packages record
+                        if(packDetail[0] != null)
+                        {   
+                            document.getElementById("summary").innerHTML = packDetail[0]['description'];                            
+                            document.getElementById("published").innerHTML = packDetail[0]['published'];  
+                            document.getElementById("license").innerHTML = packDetail[0]['license'];                            
+                            document.getElementById("author").innerHTML = packDetail[0]['author'];
+                            document.getElementById("maintainer").innerHTML = packDetail[0]['maintainer'];
+                            document.getElementById("version").innerHTML = packDetail[0]['version'];
+                        }
+                        else
+                        {
+                            document.getElementById("summary").innerHTML = "";                            
+                            document.getElementById("published").innerHTML = "";  
+                            document.getElementById("license").innerHTML = "";                            
+                            document.getElementById("author").innerHTML = "";
+                            document.getElementById("maintainer").innerHTML = "";
+                            document.getElementById("version").innerHTML = "";   
+                        }
+
+                        document.getElementById("users").innerHTML = response['user'];
+		            	//Draw system (windows/linux) chart
+		            	var chartData = [];
+		            	for(var key in response['system']){
+				          	var attrValue = response['system'][key];
+		            		chartData.push({
+				            	  name: key,
+				              	  occur: attrValue
+				          	});
+		            	}
+		            	chartDraw("systemChartDiv", chartData)
+
+		            	//draw version for packages chart
+						chartData = [];
+		            	for(var key in response['version']){
+				          	var attrValue = response['version'][key];
+		            		chartData.push({
+				            	  name: key,
+				              	  occur: attrValue
+				          	});
+		            	}
+		            	chartDraw("versionChartDiv", chartData)
+
+		            	//draw hardware chart
+						chartData = [];
+		            	for(var key in response['hardware']){
+				          	var attrValue = response['hardware'][key];
+		            		chartData.push({
+				            	  name: key,
+				              	  occur: attrValue
+				          	});
+		            	}
+		            	chartDraw("hardwareChartDiv", chartData)
+		            }  
+		         }
+		  	});
+		}
+
+		function chartDraw(divname, chartData)
+		{
+			AmCharts.makeChart( divname, {
+			  "type": "serial",
+			  "theme": "light",
+			  "dataProvider": chartData,
+			  "valueAxes": [ {
+			    "gridColor": "#FFFFFF",
+			    "gridAlpha": 0.2,
+			    "dashLength": 0
+			  } ],
+			  "gridAboveGraphs": true,
+			  "startDuration": 1,
+			  "graphs": [ {
+			    "balloonText": "[[name]]: <b>[[occur]]</b>",
+			    "fillAlphas": 0.8,
+			    "lineAlpha": 0.2,
+			    "type": "column",
+			    "valueField": "occur"
+			  } ],
+			  "chartCursor": {
+			    "categoryBalloonEnabled": false,
+			    "cursorAlpha": 0,
+			    "zoomable": false
+			  },
+			  "categoryField": "name",
+			  "categoryAxis": {
+			    "gridPosition": "start",
+			    "gridAlpha": 0,
+			    "tickPosition": "start",
+			    "tickLength": 20
+			  },
+			  "export": {
+			    "enabled": true
+			  }
+			});
+
+		}
+	</script>
+   </head>
  <body>
  	{% include 'index.html' %}
- 	<div class="page-header">
+ 	
+    <div class="container-fluid">
+	<div class="page-header">
       <h2>Summary By Software Item</h2>
     </div>
+	  <div class="col-xs-12 col-sm-12 content">
+    		<div class="row row-plan-offcanvas row-offcanvas row-offcanvas-left">
+			    <select id = "packages" class="form-control" onchange="leaveChange()">
+			    	{% for key,value in data.items %}
+				    	<option value={{ value.package }}>{{ value.package }}</option>
+				    {% endfor %}
+				</select>
+			</div>
+		</div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header" id="message">Pack</h1>
+            </div>
+                <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-2 col-md-9">
+            </div>
+            <div class="col-lg-4 col-md-9">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div style="font-size:25px;" class="col-xs-7 text-center">
+                                <div style="padding-top:7px;">Unique Users</div>
+                                <i class="fa fa-spinner"></i>
+                            </div>
+                            <div class="col-xs-5 text-left">
+                                <div style="font-size:35px;" id="users"></div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-9">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div style="font-size:25px;" class="col-xs-7 text-center">
+                                <div style="padding-top:7px;">Impact Score</div>
+                                <i class="fa fa-spinner"></i>
+                            </div>
+                            <div class="col-xs-5 text-left">
+                                <div style="font-size:35px;" id="users"></div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- /.DETAIL row -->
+        <div class="row">
+            <div class="col-lg-8 col-md-offset-2">
+                <div class="panel panel-default panel-primary">
+                    <div class="panel-heading">
+                        <i class="fa fa-envelope fa-fw"></i> Package Details
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <ul class="chat">
+                            <li class="left clearfix">
+                                <div class="chat-body clearfix">
+                                    <div class="row">
+                                        <div  class="col-xs-2">
+                                            <div class="header" >
+                                                <strong class="primary-font" style="font-size:15px;">Summary</strong>
+                                            </div>
+                                        </div>
+                                        <div  class="col-xs-10">
+                                            <p id="summary"  style="font-size:17px;">
+                                                
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="left clearfix">
+                                <div class="chat-body clearfix">
+                                    <div class="row">
+                                        <div  class="col-xs-2">
+                                            <div class="header" >
+                                                <strong class="primary-font" style="font-size:15px;">Author</strong>
+                                            </div>
+                                        </div>
+                                        <div  class="col-xs-10">
+                                            <p id="author" style="font-size:17px;">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="left clearfix">
+                                <div class="chat-body clearfix">
+                                    <div class="row">
+                                        <div class="col-xs-2">
+                                            <div class="header" >
+                                                <strong class="primary-font" style="font-size:15px;">Published</strong>
+                                            </div>
+                                        </div>
+                                        <div  class="col-xs-10">
+                                            <p id="published" style="font-size:17px;">
+                                                
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="left clearfix">
+                                <div class="chat-body clearfix">
+                                    <div class="row">
+                                        <div  class="col-xs-2">
+                                            <div class="header" >
+                                                <strong class="primary-font" style="font-size:15px;">License</strong>
+                                            </div>
+                                        </div>
+                                        <div  class="col-xs-10">
+                                            <p id="license" style="font-size:17px;">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="left clearfix">
+                                <div class="chat-body clearfix">
+                                    <div class="row">
+                                        <div  class="col-xs-2">
+                                            <div class="header" >
+                                                <strong class="primary-font" style="font-size:15px;">Maintainer</strong>
+                                            </div>
+                                        </div>
+                                        <div  class="col-xs-10">
+                                            <p id="maintainer" style="font-size:17px;">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            
+                            <li class="left clearfix">
+                                <div class="chat-body clearfix">
+                                    <div class="row">
+                                        <div  class="col-xs-2">
+                                            <div class="header" >
+                                                <strong class="primary-font" style="font-size:15px;">Latest Version</strong>
+                                            </div>
+                                        </div>
+                                        <div  class="col-xs-10">
+                                            <p id="version" style="font-size:17px;">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-8 -->
+        </div>
+        <!-- /.row -->
+
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-envelope fa-fw"></i> Operating System
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        	<div class="chartdiv" id="systemChartDiv"></div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-8 -->
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-bell fa-fw"></i> Versions
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                    		<div class="chartdiv" id="versionChartDiv"></div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+                <!-- /.panel .chat-panel -->
+            </div>
+            <!-- /.col-lg-4 -->
+        </div>
+        <!-- /.row -->
+
+        <!-- Area Chart Row -->
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-bar-chart-o fa-fw"></i> Architecture
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="chartdiv" id="hardwareChartDiv"></div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+ 	</div>
  </body>
  </html>

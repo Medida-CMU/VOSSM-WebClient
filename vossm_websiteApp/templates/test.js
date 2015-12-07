@@ -1,4 +1,4 @@
-function dataa(djangoData)
+function callMe()
 {
-    console.log(djangoData)
+	console.log("asdsad")
 }

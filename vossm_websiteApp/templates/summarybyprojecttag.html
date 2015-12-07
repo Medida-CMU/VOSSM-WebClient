@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title> Summary Software </title>
+    <title> Summary Tag </title>
     <script src="http://www.amcharts.com/lib/3/amcharts.js"></script>
     <script src="http://www.amcharts.com/lib/3/serial.js"></script>
     <script src="http://www.amcharts.com/lib/3/themes/light.js"></script>
@@ -14,24 +14,51 @@
         height      : 500px;
         font-size   : 11px;
       }
+      .col-centered{
+            float: none;
+            margin: 0 auto;
+        }
+
+        ul
+        {
+            list-style-type: none;
+        }
     </style>
 	<script type="text/javascript">
-		function leaveChange() {
-
-			packageName = document.getElementById("packages").value;
-		    document.getElementById("message").innerHTML = packageName;
+		var packDetail;
+        function leaveChangeTag() {
+			tagName = $('#tags option:selected').text();
+		    document.getElementById("message").innerHTML = "Tag - " + tagName;
 
 		    $.ajax({
 		         type:"POST",
 		         url:'/DBOperation/',
 		         data: {
-		                'operation': 'getData', 
-		                'packageName': packageName
+		                'operation': 'getTagData', 
+		                'tagName': tagName
 		                },
 		         success: function(response){
 		            if (response!=undefined)
 		            {
-		            	document.getElementById("users").innerHTML = response['user'];
+		            	$('#fbody').remove();
+                        console.log(response)
+
+                        if(response['tag_package_list'] != 0)
+                        {
+                        	$('#pkgTable').append('<tbody id="fbody"></tbody>');
+                        	for (pkg in response['tag_package_list'])
+			            	{
+			            		tmp = response['tag_package_list'][pkg]
+			            		$('#fbody').append('<tr><td>'+tmp['package']+'</td><td>'+tmp['version']+'</td><td>'+tmp['hardware']+'</td><td>'+tmp['system']+'</td></tr>')
+						    }
+                        }
+                        else
+                        {
+                        	$('#fbody').removeData();
+                        }
+		            
+                        document.getElementById("users").innerHTML = response['user'];
+                        document.getElementById("tagged").innerHTML = response['tag_package_list'].length;
 		            	//Draw system (windows/linux) chart
 		            	var chartData = [];
 		            	for(var key in response['system']){
@@ -112,15 +139,15 @@
  <body>
  	{% include 'index.html' %}
  	
-    <div class="container-fluid">
-	<div class="page-header">
-      <h2>Summary By Project Tag</h2>
-    </div>
+    <div class="container-fluid" id="container">
+		<div class="page-header">
+	      <h2>Summary By Project Tag</h2>
+	    </div>
 	  <div class="col-xs-12 col-sm-12 content">
     		<div class="row row-plan-offcanvas row-offcanvas row-offcanvas-left">
-			    <select id = "packages" class="form-control" onchange="leaveChange()">
+			    <select id = "tags" class="form-control" onchange="leaveChangeTag()">
 			    	{% for key,value in data.items %}
-				    	<option value={{ value.package }}>{{ value.package }}</option>
+				    	<option value={{ value.package }}>{{ value.tag }}</option>
 				    {% endfor %}
 				</select>
 			</div>
@@ -132,7 +159,7 @@
             </div>
                 <!-- /.col-lg-12 -->
         </div>
-            <!-- /.row -->
+        <!-- /.row -->
         <div class="row">
             <div class="col-lg-2 col-md-9">
             </div>
@@ -157,11 +184,11 @@
                     <div class="panel-heading">
                         <div class="row">
                             <div style="font-size:25px;" class="col-xs-7 text-center">
-                                <div style="padding-top:7px;">Impact Score</div>
+                                <div style="padding-top:7px;">Packages</div>
                                 <i class="fa fa-spinner"></i>
                             </div>
                             <div class="col-xs-5 text-left">
-                                <div style="font-size:35px;" id="users"></div>
+                                <div style="font-size:35px;" id="tagged"></div>
                                 
                             </div>
                         </div>
@@ -169,6 +196,37 @@
                 </div>
             </div>
         </div>
+        
+        <!-- /.DETAIL row -->
+        <div class="row">
+            <div class="col-lg-8 col-md-offset-2">
+                <div class="panel panel-default panel-primary">
+                    <div class="panel-heading">
+                        <i class="fa fa-envelope fa-fw"></i> Package Details
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                		<div class="table-responsive">
+					        <table id="pkgTable" class="table table-striped">
+					           <thead>
+					              <tr>
+					                <th>Package Name</th>
+					                <th>Version</th>
+					                <th>Hardware</th>
+					                <th>System</th>
+					              </tr>
+					           </thead> 
+					       </table>
+					 </div>   
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-8 -->
+        </div>
+        <!-- /.row -->
+
         <!-- /.row -->
         <div class="row">
             <div class="col-lg-6">
@@ -188,11 +246,11 @@
             <div class="col-lg-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <i class="fa fa-bell fa-fw"></i> Versions
+                        <i class="fa fa-bell fa-fw"></i> Architecture
                     </div>
                     <!-- /.panel-heading -->
                     <div class="panel-body">
-                    		<div class="chartdiv" id="versionChartDiv"></div>
+                    		<div class="chartdiv" id="hardwareChartDiv"></div>
                     </div>
                     <!-- /.panel-body -->
                 </div>
@@ -202,24 +260,6 @@
             <!-- /.col-lg-4 -->
         </div>
         <!-- /.row -->
-
-            <!-- Graph Row -->
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <i class="fa fa-bar-chart-o fa-fw"></i> Area Chart Example
-                    </div>
-                    <!-- /.panel-heading -->
-                    <div class="panel-body">
-                        <div class="chartdiv" id="hardwareChartDiv"></div>
-                    </div>
-                    <!-- /.panel-body -->
-                </div>
-                <!-- /.panel -->
-            </div>
-            <!-- /.col-lg-12 -->
-        </div>
  	</div>
  </body>
  </html>
