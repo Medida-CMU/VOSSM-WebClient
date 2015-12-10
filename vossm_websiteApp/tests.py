@@ -161,4 +161,44 @@ class SimpleTest(unittest.TestCase):
         c = Client()
         response=c.get('/softwareitem/')
         status=200
-        self.assertEquals(response.status_code,status)   
+        self.assertEquals(response.status_code,status)  
+    def test_share_data(self):
+        '''
+        Tests update config method-getData operation
+        '''
+        c = Client()
+        response=c.get('/sharedata/')
+        status=200
+        self.assertEquals(response.status_code,status)
+
+    def download_share_data(self):
+        '''
+        Tests download of json data
+        '''
+        c = Client()
+        checkedVal = '["codetools","survival","splines","survival","codetools","parallel","compiler","KernSmooth","lattice","cluster","spatial","lattice","KernSmooth","splines","foreign","grid","nlme","mgcv","spatial","splines","tcltk","Matrix","cluster","class","boot","compiler","mgcv","rpart","nnet","tcltk","MASS","parallel","nnet","nlme","boot","stats4","grid","rpart","Matrix","MASS","stats4"]'
+        response=c.post('/download_json/',{'checkedVal':checkedVal})
+        
+        status=200
+        self.assertEquals(response.status_code,status)
+
+    def test_summary_by_day(self):
+        '''
+        Tests download of json data
+        '''
+        c = Client()
+        response=c.get('/softwareday/',{})
+        
+        status=200
+        self.assertEquals(response.status_code,status)
+
+    def test_summary_by_project(self):
+        '''
+        Tests download of json data
+        '''
+        c = Client()
+        response=c.get('/projecttag/',{})
+        
+        status=200
+        self.assertEquals(response.status_code,status)
+     
