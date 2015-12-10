@@ -18,6 +18,8 @@ urlpatterns = patterns('',
       url(r'^download_json/$','vossm_websiteApp.sharedata.download_json'),
       url(r'^update_config/$','vossm_websiteApp.configuredata.update_config'),
       url(r'^TagUpdate/$','vossm_websiteApp.configuredata.TagUpdate'),
+
+      url(r'^softwareday/','vossm_websiteApp.summarybyday.summary'),
     # Examples:
     # url(r'^$', 'vossm_project.views.home', name='home'),
     # url(r'^vossm_project/', include('vossm_project.foo.urls')),

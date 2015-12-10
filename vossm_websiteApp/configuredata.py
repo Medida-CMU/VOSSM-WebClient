@@ -32,6 +32,7 @@ def configure(request):
 def update_config(request):
 	
 	if request.POST['operation'] == 'getData':
+		print request.POST
 		tag_list = request.POST['tagList']
 		idField = request.POST['id']
 		idField = idField.replace("'", "\"");

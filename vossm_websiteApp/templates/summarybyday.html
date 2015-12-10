@@ -6,7 +6,9 @@
     <script src="http://www.amcharts.com/lib/3/serial.js"></script>
     <script src="http://www.amcharts.com/lib/3/themes/light.js"></script>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
 
     <style>
       .chartdiv {
@@ -85,7 +87,8 @@
 						chartData = [];
 		            	for(var key in response['hardware']){
 				          	var attrValue = response['hardware'][key];
-		            		chartData.push({
+		            		console.log(response['hardware'][key])
+                            chartData.push({
 				            	  name: key,
 				              	  occur: attrValue
 				          	});
@@ -141,17 +144,35 @@
  	
     <div class="container-fluid" id="container">
 		<div class="page-header">
-	      <h2>Summary By Project Tag</h2>
+	      <h2>Summary By Day</h2>
 	    </div>
-	  <div class="col-xs-12 col-sm-12 content">
-    		<div class="row row-plan-offcanvas row-offcanvas row-offcanvas-left">
-			    <select id = "tags" class="form-control" onchange="leaveChangeTag()">
-			    	{% for key,value in data.items %}
-				    	<option value={{ value.package }}>{{ value.tag }}</option>
-				    {% endfor %}
-				</select>
-			</div>
-		</div>
+        <div class="row">
+            <div class="col-lg-1">
+                Start Date :
+            </div>
+            <div class="col-lg-3">
+                <div class="input-group date" data-provide="datepicker">
+                    <input type="text" class="form-control" id="start">
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-1">
+                End Date :
+            </div>
+            <div class="col-lg-3">
+                <div class="input-group date" data-provide="datepicker">
+                    <input type="text" class="form-control" id="end">
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-th"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <button type="button" class="btn btn-primary" id="dateSubmit" >Submit</button>
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-lg-12">
@@ -233,7 +254,7 @@
             <div class="col-lg-6">
                 <div class="panel panel-default panel-primary">
                     <div class="panel-heading">
-                        <i class="fa fa-envelope fa-fw"></i> Operating System
+                        <i class="fa fa-envelope fa-fw"></i> Oerating System
                     </div>
                     <!-- /.panel-heading -->
                     <div class="panel-body">
@@ -261,6 +282,132 @@
             <!-- /.col-lg-4 -->
         </div>
         <!-- /.row -->
+
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="panel panel-default panel-primary">
+                    <div class="panel-heading">
+                        <i class="fa fa-envelope fa-fw"></i> Operating System - Duration
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                            <div class="chartdiv" id="systemDurationChartDiv"></div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-8 -->
+            <div class="col-lg-6">
+                <div class="panel panel-default panel-primary">
+                    <div class="panel-heading">
+                        <i class="fa fa-bell fa-fw"></i> Architecture - Duration
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                            <div class="chartdiv" id="hardwareDurationChartDiv"></div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+                <!-- /.panel .chat-panel -->
+            </div>
+            <!-- /.col-lg-4 -->
+        </div>
+        <!-- /.row -->
  	</div>
  </body>
+ <script type="text/javascript">
+ $('#dateSubmit').click(function() {
+        $.ajax({
+             type:"POST",
+             url:'/DBOperation/',
+             data: {
+                    'operation': 'getDataDate', 
+                    'startDate': $('#start').val(),
+                    'endDate': $('#end').val()
+                    },
+             success: function(response){
+                if (response!=undefined)
+                {
+                    $('#fbody').remove();
+                    console.log(response)
+
+                    if(response['tag_package_list'] != 0)
+                    {
+                        $('#pkgTable').append('<tbody id="fbody"></tbody>');
+                        for (pkg in response['tag_package_list'])
+                        {
+                            tmp = response['tag_package_list'][pkg]
+                            $('#fbody').append('<tr><td>'+tmp['package']+'</td><td>'+tmp['version']+'</td><td>'+tmp['hardware']+'</td><td>'+tmp['system']+'</td><td>'+tmp['language']+'</td></tr>')
+                        }
+                    }
+                    else
+                    {
+                        $('#fbody').removeData();
+                    }
+                
+                    document.getElementById("users").innerHTML = response['user'];
+                    document.getElementById("tagged").innerHTML = response['tag_package_list'].length;
+                    //Draw system (windows/linux) chart
+                    var chartData = [];
+                    for(var key in response['system']){
+                        var attrValue = response['system'][key];
+                        chartData.push({
+                              name: key,
+                              occur: attrValue
+                        });
+                    }
+                    chartDraw("systemChartDiv", chartData)
+
+                    //draw version for packages chart
+                    chartData = [];
+                    for(var key in response['version']){
+                        var attrValue = response['version'][key];
+                        chartData.push({
+                              name: key,
+                              occur: attrValue
+                        });
+                    }
+                    chartDraw("versionChartDiv", chartData)
+
+                    //draw hardware chart
+                    chartData = [];
+                    for(var key in response['hardware']){
+                        var attrValue = response['hardware'][key];
+                        chartData.push({
+                              name: key,
+                              occur: attrValue
+                        });
+                    }
+                    chartDraw("hardwareChartDiv", chartData)
+                    
+                    //draw hardware chart
+                    chartData = [];
+                    for(var key in response['hardware_duration']){
+                        var attrValue = response['hardware_duration'][key];
+                        console.log(attrValue)
+                        chartData.push({
+                              name: key,
+                              occur: attrValue
+                        });
+                    }
+                    chartDraw("hardwareDurationChartDiv", chartData)
+
+                    //draw hardware chart
+                    chartData = [];
+                    for(var key in response['system_duration']){
+                        var attrValue = response['system_duration'][key];
+                        chartData.push({
+                              name: key,
+                              occur: attrValue
+                        });
+                    }
+                    chartDraw("systemDurationChartDiv", chartData)
+                }  
+             }
+        });
+    });
+ </script>
  </html>
