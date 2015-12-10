@@ -144,3 +144,21 @@ class SimpleTest(unittest.TestCase):
         response=c.post('/DBOperation/',{'operation':'getDataDate','startDate':'12/02/2015','endDate':'12/05/2015'}, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         status=200
         self.assertEquals(response.status_code,status)
+
+    def test_manage_data(self):
+        '''
+        Tests update config method-getData operation
+        '''
+        c = Client()
+        response=c.get('/managepeers/')
+        status=200
+        self.assertEquals(response.status_code,status)
+
+    def test_summary_by_software(self):
+        '''
+        Tests update config method-getData operation
+        '''
+        c = Client()
+        response=c.get('/softwareitem/')
+        status=200
+        self.assertEquals(response.status_code,status)   

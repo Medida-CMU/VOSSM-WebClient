@@ -30,8 +30,8 @@
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
 
         <h2 class="stats">
-            80 statements &nbsp;
-            <span class="run hide_run shortkey_r button_toggle_run">76 run</span>
+            85 statements &nbsp;
+            <span class="run hide_run shortkey_r button_toggle_run">81 run</span>
             <span class="mis shortkey_m button_toggle_mis">4 missing</span>
             <span class="exc shortkey_x button_toggle_exc">0 excluded</span>
 
@@ -213,6 +213,15 @@
 <p id="n144" class="stm run hide_run"><a href="#n144">144</a></p>
 <p id="n145" class="stm run hide_run"><a href="#n145">145</a></p>
 <p id="n146" class="stm run hide_run"><a href="#n146">146</a></p>
+<p id="n147" class="pln"><a href="#n147">147</a></p>
+<p id="n148" class="stm run hide_run"><a href="#n148">148</a></p>
+<p id="n149" class="pln"><a href="#n149">149</a></p>
+<p id="n150" class="pln"><a href="#n150">150</a></p>
+<p id="n151" class="pln"><a href="#n151">151</a></p>
+<p id="n152" class="stm run hide_run"><a href="#n152">152</a></p>
+<p id="n153" class="stm run hide_run"><a href="#n153">153</a></p>
+<p id="n154" class="stm run hide_run"><a href="#n154">154</a></p>
+<p id="n155" class="stm run hide_run"><a href="#n155">155</a></p>
                 
             </td>
             <td class="text">
@@ -362,6 +371,15 @@
 <p id="t144" class="stm run hide_run">&nbsp; &nbsp; &nbsp; &nbsp; <span class="nam">response</span><span class="op">=</span><span class="nam">c</span><span class="op">.</span><span class="nam">post</span><span class="op">(</span><span class="str">&#39;/DBOperation/&#39;</span><span class="op">,</span><span class="op">{</span><span class="str">&#39;operation&#39;</span><span class="op">:</span><span class="str">&#39;getDataDate&#39;</span><span class="op">,</span><span class="str">&#39;startDate&#39;</span><span class="op">:</span><span class="str">&#39;12/02/2015&#39;</span><span class="op">,</span><span class="str">&#39;endDate&#39;</span><span class="op">:</span><span class="str">&#39;12/05/2015&#39;</span><span class="op">}</span><span class="op">,</span> <span class="nam">HTTP_X_REQUESTED_WITH</span><span class="op">=</span><span class="str">&#39;XMLHttpRequest&#39;</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t145" class="stm run hide_run">&nbsp; &nbsp; &nbsp; &nbsp; <span class="nam">status</span><span class="op">=</span><span class="num">200</span><span class="strut">&nbsp;</span></p>
 <p id="t146" class="stm run hide_run">&nbsp; &nbsp; &nbsp; &nbsp; <span class="nam">self</span><span class="op">.</span><span class="nam">assertEquals</span><span class="op">(</span><span class="nam">response</span><span class="op">.</span><span class="nam">status_code</span><span class="op">,</span><span class="nam">status</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t147" class="pln"><span class="strut">&nbsp;</span></p>
+<p id="t148" class="stm run hide_run">&nbsp; &nbsp; <span class="key">def</span> <span class="nam">test_manage_data</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t149" class="pln">&nbsp; &nbsp; &nbsp; &nbsp; <span class="str">&#39;&#39;&#39;</span><span class="strut">&nbsp;</span></p>
+<p id="t150" class="pln"><span class="str">&nbsp; &nbsp; &nbsp; &nbsp; Tests update config method-getData operation</span><span class="strut">&nbsp;</span></p>
+<p id="t151" class="pln"><span class="str">&nbsp; &nbsp; &nbsp; &nbsp; &#39;&#39;&#39;</span><span class="strut">&nbsp;</span></p>
+<p id="t152" class="stm run hide_run">&nbsp; &nbsp; &nbsp; &nbsp; <span class="nam">c</span> <span class="op">=</span> <span class="nam">Client</span><span class="op">(</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t153" class="stm run hide_run">&nbsp; &nbsp; &nbsp; &nbsp; <span class="nam">response</span><span class="op">=</span><span class="nam">c</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="str">&#39;/managepeers/&#39;</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t154" class="stm run hide_run">&nbsp; &nbsp; &nbsp; &nbsp; <span class="nam">status</span><span class="op">=</span><span class="num">200</span><span class="strut">&nbsp;</span></p>
+<p id="t155" class="stm run hide_run">&nbsp; &nbsp; &nbsp; &nbsp; <span class="nam">self</span><span class="op">.</span><span class="nam">assertEquals</span><span class="op">(</span><span class="nam">response</span><span class="op">.</span><span class="nam">status_code</span><span class="op">,</span><span class="nam">status</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
                 
             </td>
         </tr>
@@ -372,7 +390,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.org">coverage.py v4.0.3</a>,
-            created at 2015-12-10 00:21
+            created at 2015-12-10 00:25
         </p>
     </div>
 </div>
