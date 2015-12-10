@@ -72,34 +72,75 @@ class SimpleTest(unittest.TestCase):
         status=200
         self.assertEquals(response.status_code,status)
 
-    def test_update_get_tag_data(self):
+    def test_update_get_tag_data_1(self):
         '''
         Tests update config method-getData operation
         '''
         c = Client()
         id=[{'package': 'survival', 'selected': 'true', 'system': 'Windows', 'hardware': 'x86_64', 'version': '2_37_7', 'occurences': 2}]
         response=c.post('/update_config/',{'operation':'getTagData','id':id})
-        print response
         status=200
         self.assertEquals(response.status_code,status)
 
-    def test_update_get_tag_data(self):
+    def test_update_get_tag_data_2(self):
         '''
         Tests update config method-getData operation
         '''
         c = Client()
         response=c.get('/sharedata/')
-        print response
         status=200
         self.assertEquals(response.status_code,status)
 
-    def test_update_get_tag_data(self):
+    def test_update_get_tag_data_3(self):
         '''
         Tests update config method-getData operation
         '''
         c = Client()
         response=c.get('/sharedata/')
-        print response
         status=200
         self.assertEquals(response.status_code,status)
-    
+
+    def test_get_package_data(self):
+        '''
+        Tests update config method-getData operation
+        '''
+        c = Client()
+        response=c.post('/DBOperation/',{'operation':'getData','packageName':'parallel'}, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        status=200
+        self.assertEquals(response.status_code,status)
+
+    def test_get_package_data(self):
+        '''
+        Tests update config method-getData operation
+        '''
+        c = Client()
+        response=c.post('/DBOperation/',{'operation':'getData','packageName':'splines'}, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        status=200
+        self.assertEquals(response.status_code,status)
+
+    def test_get_linux_package_data(self):
+        '''
+        Tests update config method-getData operation
+        '''
+        c = Client()
+        response=c.post('/DBOperation/',{'operation':'getData','packageName':'python'}, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        status=200
+        self.assertEquals(response.status_code,status)
+
+    def test_get_tag_data(self):
+        '''
+        Tests update config method-getData operation
+        '''
+        c = Client()
+        response=c.post('/DBOperation/',{'operation':'getTagData','tagName':'anandh'}, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        status=200
+        self.assertEquals(response.status_code,status)
+
+    def test_get_date_data(self):
+        '''
+        Tests update config method-getData operation
+        '''
+        c = Client()
+        response=c.post('/DBOperation/',{'operation':'getDataDate','startDate':'12/02/2015','endDate':'12/05/2015'}, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        status=200
+        self.assertEquals(response.status_code,status)
