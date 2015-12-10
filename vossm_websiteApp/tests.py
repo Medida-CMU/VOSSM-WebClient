@@ -93,7 +93,7 @@ class SimpleTest(unittest.TestCase):
         status=200
         self.assertEquals(response.status_code,status)
 
-   def test_update_get_tag_data(self):
+    def test_update_get_tag_data(self):
         '''
         Tests update config method-getData operation
         '''
@@ -102,3 +102,4 @@ class SimpleTest(unittest.TestCase):
         print response
         status=200
         self.assertEquals(response.status_code,status)
+    
