@@ -143,7 +143,6 @@
  </table>
  <br/>
  <br/>
- <div id="chartdiv"></div>
 <div class="table-responsive">
         <table class="table table-striped">
            <thead>
@@ -153,6 +152,7 @@
                 <th>Version</th>
                 <th>Hardware</th>
                 <th>System</th>
+                <th>Language</th>
                 <th>Occurences</th>
               </tr>
            </thead> 
@@ -176,6 +176,9 @@
                </td>
                <td>
                     {{ value.system }}
+               </td>
+               <td>
+                    {{ value.language }}
                </td>
                <td>
                     {{ value.occurences }}
